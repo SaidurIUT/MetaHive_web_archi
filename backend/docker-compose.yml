@@ -14,6 +14,26 @@ services:
     networks:
       - meta-network
 
+  # Application Database (Accessible from outside Docker)
+  app-mysql:
+    container_name: app-mysql
+    image: mysql:8
+    ports:
+      - "3309:3306" # Expose MySQL on port 3309 to host
+    volumes:
+      - app_mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+    networks:
+      - meta-network
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --bind-address=0.0.0.0
+
   # Keycloak Service
   keycloak:
     container_name: keycloak
@@ -46,12 +66,13 @@ services:
       timeout: 10s
       retries: 3
 
-
 volumes:
   keycloak_mysql_data:
     name: keycloak_mysql_data
   keycloak_data:
     name: keycloak_data
+  app_mysql_data:
+    name: app_mysql_data
 
 networks:
   meta-network:
