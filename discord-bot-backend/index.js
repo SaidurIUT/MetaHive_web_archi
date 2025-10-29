@@ -33,6 +33,8 @@ const Message = require("./models/Message");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds, // Access to guilds
+    GatewayIntentBits.GuildMessages, // Access to guild messages
+    GatewayIntentBits.MessageContent, // Access to message content
   ],
 });
 
